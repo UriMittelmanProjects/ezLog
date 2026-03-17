@@ -1,7 +1,7 @@
 import { MUSCLE_COLORS, MUSCLE_ICONS, getDuration, formatDate } from "../lib/constants";
 
 export default function WorkoutDetail({ workout, onBack, onEdit, onDelete }) {
-  const muscleGroups = workout.workout_muscle_groups ?? [];
+  const muscles = workout.muscle_groups ?? [];
   const lifts = workout.lifts ?? [];
 
   return (
@@ -29,15 +29,15 @@ export default function WorkoutDetail({ workout, onBack, onEdit, onDelete }) {
           </div>
         </div>
 
-        {muscleGroups.length > 0 && (
+        {muscles.length > 0 && (
           <div className="muscle-chips" style={{ marginTop: 12 }}>
-            {muscleGroups.map(mg => (
-              <div key={mg.name} className="muscle-chip" style={{
-                background: (MUSCLE_COLORS[mg.name] || "#888") + "18",
-                border: `1px solid ${(MUSCLE_COLORS[mg.name] || "#888")}40`,
-                color: MUSCLE_COLORS[mg.name] || "#888",
+            {muscles.map(name => (
+              <div key={name} className="muscle-chip" style={{
+                background: (MUSCLE_COLORS[name] || "#888") + "18",
+                border: `1px solid ${(MUSCLE_COLORS[name] || "#888")}40`,
+                color: MUSCLE_COLORS[name] || "#888",
               }}>
-                {MUSCLE_ICONS[mg.name] || "◉"} {mg.name}
+                {MUSCLE_ICONS[name] || "◉"} {name}
               </div>
             ))}
           </div>

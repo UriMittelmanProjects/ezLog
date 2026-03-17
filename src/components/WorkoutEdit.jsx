@@ -2,16 +2,18 @@ import { useState } from "react";
 import { MUSCLES_ALL } from "../lib/constants";
 
 export default function WorkoutEdit({ workout, onBack, onSave, onAddLift, onUpdateLift, onDeleteLift }) {
-  const muscleGroups = workout.workout_muscle_groups ?? [];
   const lifts = workout.lifts ?? [];
 
   const [date, setDate] = useState(workout.date ?? "");
   const [startTime, setStartTime] = useState(workout.start_time ?? "");
   const [endTime, setEndTime] = useState(workout.end_time ?? "");
-  const [muscles, setMuscles] = useState(muscleGroups.map(m => m.name));
+  const [muscles, setMuscles] = useState(workout.muscle_groups ?? []);
   const [saving, setSaving] = useState(false);
   const [liftEdits, setLiftEdits] = useState(
-    lifts.reduce((acc, l) => ({ ...acc, [l.id]: { name: l.name, sets: l.sets, reps: l.reps, weight: l.weight ?? "", notes: l.notes ?? "" } }), {})
+    lifts.reduce((acc, l) => ({
+      ...acc,
+      [l.id]: { name: l.name, sets: l.sets, reps: l.reps, weight: l.weight ?? "", notes: l.notes ?? "" }
+    }), {})
   );
   const [newLift, setNewLift] = useState({ name: "", sets: 3, reps: "8-10", weight: "", notes: "" });
   const [showAddLift, setShowAddLift] = useState(false);
@@ -22,9 +24,15 @@ export default function WorkoutEdit({ workout, onBack, onSave, onAddLift, onUpda
 
   async function handleSave() {
     setSaving(true);
-    await onSave(workout.id, { date, start_time: startTime, end_time: endTime, muscles });
+    await onSave(workout.id, { date, start_time: startTime || null, end_time: endTime || null, muscles });
     for (const [id, vals] of Object.entries(liftEdits)) {
-      await onUpdateLift(Number(id), { name: vals.name, sets: Number(vals.sets), reps: vals.reps, weight: vals.weight ? Number(vals.weight) : 0, notes: vals.notes });
+      await onUpdateLift(id, {
+        name: vals.name,
+        sets: Number(vals.sets),
+        reps: vals.reps,
+        weight: vals.weight ? Number(vals.weight) : 0,
+        notes: vals.notes,
+      });
     }
     setSaving(false);
     onBack();
@@ -32,7 +40,13 @@ export default function WorkoutEdit({ workout, onBack, onSave, onAddLift, onUpda
 
   async function handleAddLift() {
     if (!newLift.name.trim()) return;
-    await onAddLift(workout.id, { name: newLift.name.trim(), sets: Number(newLift.sets), reps: newLift.reps, weight: newLift.weight ? Number(newLift.weight) : 0, notes: newLift.notes });
+    await onAddLift(workout.id, {
+      name: newLift.name.trim(),
+      sets: Number(newLift.sets),
+      reps: newLift.reps,
+      weight: newLift.weight ? Number(newLift.weight) : 0,
+      notes: newLift.notes,
+    });
     setNewLift({ name: "", sets: 3, reps: "8-10", weight: "", notes: "" });
     setShowAddLift(false);
   }

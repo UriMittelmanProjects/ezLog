@@ -20,7 +20,7 @@ export default function WorkoutList({ workouts, onView, onEdit, onDelete, onNew 
         )}
 
         {workouts.map(w => {
-          const muscleGroups = w.workout_muscle_groups ?? [];
+          const muscles = w.muscle_groups ?? [];
           const lifts = w.lifts ?? [];
 
           return (
@@ -35,15 +35,15 @@ export default function WorkoutList({ workouts, onView, onEdit, onDelete, onNew 
                 <div className="meta-pill">🏋️ <span>{lifts.length} lift{lifts.length !== 1 ? "s" : ""}</span></div>
               </div>
 
-              {muscleGroups.length > 0 && (
+              {muscles.length > 0 && (
                 <div className="muscle-chips">
-                  {muscleGroups.map(mg => (
-                    <div key={mg.name} className="muscle-chip" style={{
-                      background: (MUSCLE_COLORS[mg.name] || "#888") + "18",
-                      border: `1px solid ${(MUSCLE_COLORS[mg.name] || "#888")}40`,
-                      color: MUSCLE_COLORS[mg.name] || "#888",
+                  {muscles.map(name => (
+                    <div key={name} className="muscle-chip" style={{
+                      background: (MUSCLE_COLORS[name] || "#888") + "18",
+                      border: `1px solid ${(MUSCLE_COLORS[name] || "#888")}40`,
+                      color: MUSCLE_COLORS[name] || "#888",
                     }}>
-                      {MUSCLE_ICONS[mg.name] || "◉"} {mg.name}
+                      {MUSCLE_ICONS[name] || "◉"} {name}
                     </div>
                   ))}
                 </div>
