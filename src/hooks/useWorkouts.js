@@ -23,10 +23,10 @@ export function useWorkouts(userId) {
   useEffect(() => { fetchWorkouts(); }, [fetchWorkouts]);
 
   async function createWorkout(payload) {
-    const { muscles, ...rest } = payload;
+    const { muscles, ai_infer, ...rest } = payload;
     const { data: workout, error } = await supabase
       .from("workouts")
-      .insert({ ...rest, muscle_groups: muscles ?? [], user_id: userId })
+      .insert({ ...rest, muscle_groups: muscles ?? [], ai_infer_muscles: ai_infer ?? true, user_id: userId })
       .select()
       .single();
     if (error) throw error;
