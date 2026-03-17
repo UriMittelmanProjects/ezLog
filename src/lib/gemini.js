@@ -1,6 +1,6 @@
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const ENDPOINT =
-  "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-002:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 /**
  * Parse a freeform lift log message into structured lift objects.
